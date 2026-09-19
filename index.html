@@ -564,6 +564,14 @@
   .cert-card { border: 1px solid var(--border); border-radius: 16px; background: var(--surface); padding: 1.4rem 1.6rem; max-width: 560px; box-shadow: 0 6px 18px var(--shadow); }
   .cert-card h2 { font-family: 'Fraunces', serif; font-size: 1.3rem; color: var(--pine-strong); margin: 0 0 0.6rem; }
   .cert-card p { color: var(--ink-soft); margin: 0; line-height: 1.5; }
+  .know-card { border: 1px solid var(--border); border-radius: 16px; background: var(--surface); padding: 1.6rem 1.8rem; max-width: 640px; box-shadow: 0 6px 18px var(--shadow); }
+  .know-card + .know-card { margin-top: 1.6rem; }
+  .know-card h2 { font-family: 'Fraunces', serif; font-size: 1.3rem; color: var(--pine-strong); margin: 0 0 0.9rem; }
+  .know-card h3 { font-family: 'Work Sans', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--copper-strong); margin: 1.3rem 0 0.6rem; }
+  .know-card p { color: var(--ink-soft); margin: 0 0 0.4rem; line-height: 1.55; }
+  .know-card ol, .know-card ul { margin: 0; padding-left: 1.3rem; color: var(--ink-soft); line-height: 1.6; }
+  .know-card li + li { margin-top: 0.35rem; }
+  .know-card .know-note { font-style: italic; margin-top: 1.2rem; font-size: 0.92rem; }
   .cert-photo-placeholder { margin-top: 1.2rem; padding: 1.8rem; border: 1.5px dashed var(--border); border-radius: 12px; text-align: center; color: var(--ink-soft); font-size: 0.85rem; font-style: italic; }
 
   .meal-popover {
@@ -796,6 +804,7 @@
       <button type="button" class="nav-cal-link" id="feedbackOpenBtn">Feedback</button>
       <button type="button" class="nav-cal-link" id="ideasOpenBtn">Ideas</button>
       <button type="button" class="nav-cal-link" id="certOpenBtn">Certifications</button>
+      <button type="button" class="nav-cal-link" id="thingsOpenBtn">Things to Know</button>
       <button type="button" class="nav-cal-link" id="ordersPlacedOpenBtn" hidden="">Admin Dashboard</button>
     </div>
     <div class="nav-right">
@@ -907,6 +916,16 @@
         <div class="price-card reveal">
           <h3>Premium Lunch</h3>
           <p class="amount">$13 <small>/ meal</small></p>
+          <p class="fine">Premium is determined by the ingredients.</p>
+        </div>
+        <div class="price-card reveal">
+          <h3>Dessert</h3>
+          <p class="amount">$5 <small>/ treat</small></p>
+          <p class="fine">A sweet treat to round out your week.</p>
+        </div>
+        <div class="price-card reveal">
+          <h3>Premium Dessert</h3>
+          <p class="amount">$7 <small>/ treat</small></p>
           <p class="fine">Premium is determined by the ingredients.</p>
         </div>
       </div>
@@ -1083,6 +1102,52 @@ Soy sauce" required=""></textarea>
       <h2>ServSafe Certified</h2>
       <p>This course covers how to properly handle food, food safety, and food prep.</p>
       <div class="cert-photo-placeholder">Certificate photo coming soon.</div>
+    </div>
+  </div>
+</section>
+
+<section class="cal-page" id="thingsPage" hidden="">
+  <div class="cal-page-inner">
+    <a href="#top" class="cal-back-link" id="thingsBackLink">← Back to home</a>
+    <div class="cal-header-row">
+      <h1 class="cal-title" style="text-align:left; min-width:0;">Things to Know</h1>
+    </div>
+    <p class="ingr-subtitle">A quick guide to reheating and storing your meals safely.</p>
+
+    <div class="know-card">
+      <h2>How to Reheat Your Meal</h2>
+      <p>All containers are microwave-safe.</p>
+      <h3>Microwave:</h3>
+      <ol>
+        <li>Remove lid or vent it slightly.</li>
+        <li>Heat on high for 2-3 minutes, stirring halfway through.</li>
+        <li>Let it sit 1 minute before serving (containers will be hot).</li>
+      </ol>
+    </div>
+
+    <div class="know-card">
+      <h2>Freezer Storage Guidelines</h2>
+      <p>All meals are prepared fresh and can be refrigerated for up to 4 days or frozen for extended storage.</p>
+      <h3>For best quality, we recommend:</h3>
+      <ul>
+        <li>Freeze meals within 2 days of receiving if not eating within the week.</li>
+        <li>Consume frozen meals within 2-3 months for optimal taste and texture.</li>
+        <li>Meals containing cream-based sauces (Alfredo, Mac &amp; Cheese, etc.) are best consumed within 1-2 months of freezing, as dairy-based sauces may change texture over longer storage.</li>
+      </ul>
+      <h3>Thawing and Reheating:</h3>
+      <ul>
+        <li>Thaw overnight in the refrigerator before reheating.</li>
+        <li>Reheat to an internal temperature of 165°F.</li>
+        <li>Do not refreeze thawed meals.</li>
+      </ul>
+      <p class="know-note">Meals stored properly at 0°F remain safe to eat beyond these windows, but flavor and texture are best within the timeframes above.</p>
+    </div>
+
+    <div class="know-card">
+      <h2>Allergen Disclaimer</h2>
+      <p>All meals are prepared in a home/commercial kitchen that handles milk, eggs, wheat, soy, fish, shellfish, tree nuts, and peanuts. While we take care in preparation, our meals are not certified allergen-free and cross-contact may occur.</p>
+      <p>Please review ingredient lists carefully before ordering if you have a food allergy or sensitivity. A full ingredient breakdown is available for every meal upon request.</p>
+      <p>If you have a severe or life-threatening allergy, please contact us directly before ordering to discuss your specific concerns.</p>
     </div>
   </div>
 </section>
@@ -1863,13 +1928,16 @@ Soy sauce" required=""></textarea>
     var certificationsPage = document.getElementById('certificationsPage');
     var certOpenBtn = document.getElementById('certOpenBtn');
     var certBackLink = document.getElementById('certBackLink');
+    var thingsPage = document.getElementById('thingsPage');
+    var thingsOpenBtn = document.getElementById('thingsOpenBtn');
+    var thingsBackLink = document.getElementById('thingsBackLink');
     var orderPage = document.getElementById('orderPage');
     var orderBackLink = document.getElementById('orderBackLink');
     var ordersPlacedPage = document.getElementById('ordersPlacedPage');
     var ordersPlacedOpenBtn = document.getElementById('ordersPlacedOpenBtn');
     var ordersPlacedBackLink = document.getElementById('ordersPlacedBackLink');
 
-    var PAGES = { calendar: calendarPage, ingredients: ingredientsPage, feedback: feedbackPage, ideas: ideasPage, certifications: certificationsPage, order: orderPage, ordersPlaced: ordersPlacedPage };
+    var PAGES = { calendar: calendarPage, ingredients: ingredientsPage, feedback: feedbackPage, ideas: ideasPage, certifications: certificationsPage, things: thingsPage, order: orderPage, ordersPlaced: ordersPlacedPage };
     var ROUTED_PAGES = Object.keys(PAGES);
     var currentPage = 'home';
 
@@ -1883,6 +1951,7 @@ Soy sauce" required=""></textarea>
       if (feedbackOpenBtn) feedbackOpenBtn.classList.toggle('is-active', name === 'feedback');
       if (ideasOpenBtn) ideasOpenBtn.classList.toggle('is-active', name === 'ideas');
       if (certOpenBtn) certOpenBtn.classList.toggle('is-active', name === 'certifications');
+      if (thingsOpenBtn) thingsOpenBtn.classList.toggle('is-active', name === 'things');
       if (ordersPlacedOpenBtn) ordersPlacedOpenBtn.classList.toggle('is-active', name === 'ordersPlaced');
       hideMealPopover();
       closeBarEditor();
@@ -1928,12 +1997,14 @@ Soy sauce" required=""></textarea>
     if (feedbackOpenBtn) feedbackOpenBtn.addEventListener('click', function () { goToPage('feedback'); });
     if (ideasOpenBtn) ideasOpenBtn.addEventListener('click', function () { goToPage('ideas'); });
     if (certOpenBtn) certOpenBtn.addEventListener('click', function () { goToPage('certifications'); });
+    if (thingsOpenBtn) thingsOpenBtn.addEventListener('click', function () { goToPage('things'); });
     if (ordersPlacedOpenBtn) ordersPlacedOpenBtn.addEventListener('click', function () { goToPage('ordersPlaced'); });
     if (calBackLink) calBackLink.addEventListener('click', function (e) { e.preventDefault(); goToPage('home'); });
     if (ingrBackLink) ingrBackLink.addEventListener('click', function (e) { e.preventDefault(); goToPage('home'); });
     if (feedbackBackLink) feedbackBackLink.addEventListener('click', function (e) { e.preventDefault(); goToPage('home'); });
     if (ideasBackLink) ideasBackLink.addEventListener('click', function (e) { e.preventDefault(); goToPage('home'); });
     if (certBackLink) certBackLink.addEventListener('click', function (e) { e.preventDefault(); goToPage('home'); });
+    if (thingsBackLink) thingsBackLink.addEventListener('click', function (e) { e.preventDefault(); goToPage('home'); });
     if (orderBackLink) orderBackLink.addEventListener('click', function (e) { e.preventDefault(); goToPage('home'); });
     if (ordersPlacedBackLink) ordersPlacedBackLink.addEventListener('click', function (e) { e.preventDefault(); goToPage('home'); });
     if (navHomeLink) navHomeLink.addEventListener('click', function (e) {
