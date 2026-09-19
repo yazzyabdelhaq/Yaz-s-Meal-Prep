@@ -1,4 +1,4 @@
-<!doctype html><html><head><meta charset="utf8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found]){display:none!important}</style></head><body>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found]){display:none!important}</style></head><body>
 <title>Yaz's Meal Prep</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Work+Sans:wght@400;500;600;700&family=Alex+Brush&display=swap');
@@ -206,6 +206,55 @@
   .nav-cal-link:hover { color: var(--copper-strong); }
   .nav-cal-link:hover::after, .nav-cal-link.is-active::after { transform: scaleX(1); }
 
+  /* nav-menu is a structural wrapper only — on desktop it stays invisible to the grid */
+  .nav-menu { display: contents; }
+  .nav-toggle {
+    display: none;
+    width: 40px; height: 40px; padding: 0; border-radius: 50%;
+    align-items: center; justify-content: center; gap: 5px; flex-direction: column;
+    background: transparent; border: 1.5px solid var(--border); cursor: pointer;
+    transition: background .2s ease, border-color .2s ease;
+  }
+  .nav-toggle:hover { background: color-mix(in srgb, var(--copper) 10%, transparent); }
+  .nav-toggle-bar {
+    display: block; width: 18px; height: 2px; border-radius: 2px;
+    background: var(--pine-strong);
+    transition: transform .28s cubic-bezier(.22,1,.36,1), opacity .2s ease;
+  }
+  header.site-nav.menu-open .nav-toggle-bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  header.site-nav.menu-open .nav-toggle-bar:nth-child(2) { opacity: 0; }
+  header.site-nav.menu-open .nav-toggle-bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  @media (max-width: 760px) {
+    header.site-nav {
+      display: flex; align-items: center; justify-content: space-between;
+      position: relative;
+    }
+    .nav-toggle { display: inline-flex; }
+    .nav-menu {
+      display: none;
+      position: absolute; top: calc(100% + 0.6rem); right: clamp(1rem, 4vw, 1.5rem);
+      left: clamp(1rem, 4vw, 1.5rem);
+      margin-left: auto; max-width: 300px;
+      flex-direction: column; align-items: stretch; gap: 0.3rem;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+      padding: 0.9rem 1.1rem 1.1rem; box-shadow: 0 20px 40px rgba(0,0,0,0.22);
+      max-height: calc(100vh - 5.5rem); overflow-y: auto;
+    }
+    header.site-nav.menu-open .nav-menu { display: flex; }
+    .nav-links { flex-direction: column; align-items: stretch; gap: 0.1rem; justify-self: auto; }
+    .nav-cal-link { width: 100%; text-align: left; padding: 0.7rem 0.1rem; }
+    .nav-cal-link::after { display: none; }
+    .nav-cal-link.is-active { color: var(--copper-strong); }
+    .nav-right {
+      flex-direction: column; align-items: stretch; gap: 0.7rem; justify-self: auto;
+      margin-top: 0.5rem; padding-top: 0.8rem; border-top: 1px solid var(--border);
+    }
+    .nav-cta { text-align: center; }
+    .admin-menu-btn { width: 100%; text-align: center; }
+    .admin-dropdown { position: static; width: 100%; margin-top: 0.6rem; box-shadow: none; }
+  }
+
   /* ---------- Calendar page ---------- */
   .cal-page {
     min-height: 100vh;
@@ -271,6 +320,21 @@
   }
   .cal-add-bar:hover { background: color-mix(in srgb, var(--copper) 14%, transparent); }
   .cal-legend-note { font-size: 0.78rem; color: var(--ink-soft); font-style: italic; margin: 1.1rem 0 0; }
+  .cal-color-legend {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1.5rem;
+    margin: 1.6rem 0 0; padding: 0.85rem 1.1rem;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+  }
+  .cal-color-legend-title {
+    font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 0.7rem;
+    text-transform: uppercase; letter-spacing: 0.07em; color: var(--ink-soft); white-space: nowrap;
+  }
+  .cal-color-legend-item { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--ink); white-space: nowrap; }
+  .cal-color-dot { width: 12px; height: 12px; border-radius: 50%; flex: none; box-shadow: 0 1px 2px rgba(0,0,0,0.18); }
+  .cal-color-dot.dot-pine { background: var(--bar-pine); }
+  .cal-color-dot.dot-copper { background: var(--bar-copper); }
+  .cal-color-dot.dot-basil { background: var(--bar-basil); }
+  .cal-color-dot.dot-lavender { background: var(--bar-lavender); }
   .bar-editor {
     position: fixed; z-index: 310; width: 240px;
     background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
@@ -329,11 +393,36 @@
     outline: none; transition: border-color .2s ease;
   }
   .recipe-search:focus { border-color: var(--copper); }
-  .recipe-list { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 2.6rem; }
+  .recipe-list { display: flex; flex-direction: column; margin-bottom: 2.6rem; }
   .recipe-empty { color: var(--ink-soft); font-style: italic; font-size: 0.9rem; }
+  .recipe-group + .recipe-group { margin-top: 2.2rem; }
+  .recipe-group-title { font-size: 1.3rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); margin: 0 0 0.9rem; }
+  .recipe-group-items { display: flex; flex-direction: column; gap: 0.6rem; }
+  .recipe-name-wrap { display: flex; flex-direction: column; align-items: flex-start; gap: 0.2rem; }
+  .recipe-category-tag {
+    font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 0.68rem;
+    text-transform: uppercase; letter-spacing: 0.07em;
+  }
+  .recipe-category-tag.cat-lunch { color: var(--basil-dark); }
+  .recipe-category-tag.cat-dessert { color: var(--lavender-dark); }
+  .recipe-edit-category { margin-bottom: 0.6rem; }
+  .recipe-edit-category label { display: flex; flex-direction: column; gap: 0.3rem; font-size: 0.78rem; font-weight: 600; color: var(--ink-soft); max-width: 12rem; }
+  .recipe-edit-category select {
+    font-family: 'Work Sans', sans-serif; font-size: 0.9rem; color: var(--ink);
+    padding: 0.5rem 0.7rem; border-radius: 8px; border: 1.5px solid var(--border);
+    background: var(--bg);
+  }
   .recipe-item {
     border: 1px solid var(--border); border-radius: 14px; background: var(--surface);
     overflow: hidden;
+  }
+  @keyframes recipeHighlightPulse {
+    0%, 100% { box-shadow: 0 0 0 0 transparent; }
+    25% { box-shadow: 0 0 0 4px color-mix(in srgb, var(--copper) 45%, transparent); }
+  }
+  .recipe-item.recipe-item-highlight { animation: recipeHighlightPulse 1.7s ease; }
+  @media (prefers-reduced-motion: reduce) {
+    .recipe-item.recipe-item-highlight { animation: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--copper) 45%, transparent); }
   }
   .recipe-toggle-row { display: flex; align-items: center; }
   .recipe-toggle {
@@ -456,12 +545,12 @@
   }
   .recipe-form-title { font-size: 1.2rem; }
   .recipe-field { display: flex; flex-direction: column; gap: 0.4rem; font-size: 0.85rem; font-weight: 600; color: var(--ink-soft); }
-  .recipe-field input, .recipe-field textarea {
+  .recipe-field input, .recipe-field textarea, .recipe-field select {
     font-family: 'Work Sans', sans-serif; font-size: 0.95rem; font-weight: 400; color: var(--ink);
     padding: 0.7rem 0.9rem; border-radius: 10px; border: 1.5px solid var(--border);
     background: var(--surface); outline: none; resize: vertical; transition: border-color .2s ease;
   }
-  .recipe-field input:focus, .recipe-field textarea:focus { border-color: var(--copper); }
+  .recipe-field input:focus, .recipe-field textarea:focus, .recipe-field select:focus { border-color: var(--copper); }
   .recipe-form .btn { align-self: flex-start; }
   .recipe-save-status { font-size: 0.82rem; color: var(--basil); min-height: 1.1em; margin: 0; }
   .recipe-save-status.warn { color: var(--copper-strong); }
@@ -619,6 +708,7 @@
   /* Menu */
   .menu-note { text-align:center; font-style: italic; color: var(--ink-soft); font-size: 0.9rem; margin-top: 2.6rem; }
   .menu-note a { color: var(--copper-strong); }
+  .menu-cta { text-align: center; margin-top: 2.6rem; }
   .menu-dates {
     font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 0.95rem;
     color: var(--copper-strong); letter-spacing: 0.02em; margin-top: 0.5rem;
@@ -636,11 +726,21 @@
     background: var(--surface); border: 1px solid var(--border); border-radius: 18px;
     padding: 1.6rem; display: flex; flex-direction: column; gap: 0.7rem;
     box-shadow: 0 6px 18px var(--shadow);
-    transition: transform .3s ease, box-shadow .3s ease;
+    transition: transform .3s ease, box-shadow .3s ease, border-color .2s ease;
+    cursor: pointer; text-align: left; width: 100%; font: inherit; color: inherit; appearance: none;
+    margin: 0; box-sizing: border-box;
   }
-  .meal-card:hover { transform: translateY(-5px); box-shadow: 0 16px 30px var(--shadow); }
+  .meal-card:hover { transform: translateY(-5px); box-shadow: 0 16px 30px var(--shadow); border-color: var(--copper); }
+  .meal-card:focus-visible { outline: 2px solid var(--pine); outline-offset: 3px; }
   .meal-card h3 { font-size: 1.15rem; }
   .meal-card p.desc { color: var(--ink-soft); font-size: 0.92rem; flex-grow: 1; }
+  .meal-card-cta {
+    margin-top: auto; padding-top: 0.3rem;
+    font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 0.8rem;
+    color: var(--copper-strong); display: inline-flex; align-items: center; gap: 0.3rem;
+    transition: gap .2s ease;
+  }
+  .meal-card:hover .meal-card-cta, .meal-card:focus-visible .meal-card-cta { gap: 0.5rem; color: var(--pine-strong); }
   .macros { display: flex; gap: 0.5rem; flex-wrap: wrap; }
   .tag {
     font-size: 0.72rem; letter-spacing: 0.05em; font-weight: 600;
@@ -689,38 +789,45 @@
   <a class="nav-brand" href="#top" id="navHomeLink" aria-label="Yaz's Meal Prep — home">
     <span class="nav-mark" role="img" aria-label="Yaz's Meal Prep logo"></span>
   </a>
-  <div class="nav-links">
-    <button type="button" class="nav-cal-link" id="calOpenBtn">Calendar</button>
-    <button type="button" class="nav-cal-link" id="ingrOpenBtn">Ingredients</button>
-    <button type="button" class="nav-cal-link" id="feedbackOpenBtn">Feedback</button>
-    <button type="button" class="nav-cal-link" id="ideasOpenBtn">Ideas</button>
-    <button type="button" class="nav-cal-link" id="certOpenBtn">Certifications</button>
-    <button type="button" class="nav-cal-link" id="ordersPlacedOpenBtn" hidden>Admin Dashboard</button>
-  </div>
-  <div class="nav-right">
-    <div class="admin-menu" id="adminMenu">
-      <button type="button" class="admin-menu-btn" id="adminMenuBtn" aria-expanded="false">Admin</button>
-      <div class="admin-dropdown" id="adminDropdown" hidden="">
-        <form id="adminLoginForm" class="admin-dropdown-form">
-          <label class="recipe-field">
-            <span>Username</span>
-            <input type="text" id="adminUsername" autocomplete="username" required="">
-          </label>
-          <label class="recipe-field">
-            <span>Password</span>
-            <input type="password" id="adminPassword" autocomplete="current-password" required="">
-          </label>
-          <p class="admin-error" id="adminError" hidden="">Incorrect username or password.</p>
-          <button type="submit" class="btn btn-fill admin-dropdown-btn">Log in</button>
-        </form>
-        <div class="admin-dropdown-loggedin" id="adminLoggedInPanel" hidden="">
-          <p class="admin-loggedin-text">Logged in as admin.</p>
-          <button type="button" class="btn btn-ghost admin-dropdown-btn" id="adminLogoutLink">Log out</button>
+  <div class="nav-menu" id="navMenu">
+    <div class="nav-links">
+      <button type="button" class="nav-cal-link" id="calOpenBtn">Calendar</button>
+      <button type="button" class="nav-cal-link" id="ingrOpenBtn">Ingredients</button>
+      <button type="button" class="nav-cal-link" id="feedbackOpenBtn">Feedback</button>
+      <button type="button" class="nav-cal-link" id="ideasOpenBtn">Ideas</button>
+      <button type="button" class="nav-cal-link" id="certOpenBtn">Certifications</button>
+      <button type="button" class="nav-cal-link" id="ordersPlacedOpenBtn" hidden="">Admin Dashboard</button>
+    </div>
+    <div class="nav-right">
+      <div class="admin-menu" id="adminMenu">
+        <button type="button" class="admin-menu-btn" id="adminMenuBtn" aria-expanded="false">Admin</button>
+        <div class="admin-dropdown" id="adminDropdown" hidden="">
+          <form id="adminLoginForm" class="admin-dropdown-form">
+            <label class="recipe-field">
+              <span>Username</span>
+              <input type="text" id="adminUsername" autocomplete="username" required="">
+            </label>
+            <label class="recipe-field">
+              <span>Password</span>
+              <input type="password" id="adminPassword" autocomplete="current-password" required="">
+            </label>
+            <p class="admin-error" id="adminError" hidden="">Incorrect username or password.</p>
+            <button type="submit" class="btn btn-fill admin-dropdown-btn">Log in</button>
+          </form>
+          <div class="admin-dropdown-loggedin" id="adminLoggedInPanel" hidden="">
+            <p class="admin-loggedin-text">Logged in as admin.</p>
+            <button type="button" class="btn btn-ghost admin-dropdown-btn" id="adminLogoutLink">Log out</button>
+          </div>
         </div>
       </div>
+      <a class="nav-cta" href="#order" id="navOrderBtn">Order now</a>
     </div>
-    <a class="nav-cta" href="#order" id="navOrderBtn">Order now</a>
   </div>
+  <button type="button" class="nav-toggle" id="navToggleBtn" aria-expanded="false" aria-controls="navMenu" aria-label="Open menu">
+    <span class="nav-toggle-bar"></span>
+    <span class="nav-toggle-bar"></span>
+    <span class="nav-toggle-bar"></span>
+  </button>
 </header>
 
 <main id="top">
@@ -773,14 +880,14 @@
         <span class="eyebrow">Updated weekly</span>
         <h2>Next week's menu</h2>
         <p class="menu-dates" id="menuDates"></p>
-        <div class="menu-admin-controls" id="menuAdminControls" hidden>
+        <div class="menu-admin-controls" id="menuAdminControls" hidden="">
           <label>Show week on homepage:
             <select id="menuWeekSelect"></select>
           </label>
         </div>
       </div>
       <div class="menu-grid" id="menuGrid"></div>
-      <p class="menu-note">See the full month on the <a href="#calendar">Calendar</a> page and check out ingredient lists on <a href="#ingredients">Ingredients</a> page.</p>
+      <div class="menu-cta"><a class="btn btn-fill" href="#order">Order now</a></div>
     </div>
   </section>
 
@@ -831,11 +938,18 @@
       </div>
       <div class="cal-grid" id="calGrid"></div>
     </div>
+    <div class="cal-color-legend" aria-label="Meal color key">
+      <span class="cal-color-legend-title">Color key</span>
+      <span class="cal-color-legend-item"><span class="cal-color-dot dot-pine"></span>Chicken &amp; turkey</span>
+      <span class="cal-color-legend-item"><span class="cal-color-dot dot-copper"></span>Red meats</span>
+      <span class="cal-color-legend-item"><span class="cal-color-dot dot-basil"></span>Seafood</span>
+      <span class="cal-color-legend-item"><span class="cal-color-dot dot-lavender"></span>Desserts</span>
+    </div>
   </div>
 </section>
 
-<script type="application/json" id="recipeData">[{"id":"lemon-herb-chicken-bowl","name":"Lemon Herb Chicken Bowl","ingredients":["Chicken breast","Yukon gold potatoes","Green beans","Lemon","Garlic","Olive oil","Fresh thyme & rosemary"],"desc":"Grilled chicken thighs marinated overnight in lemon, garlic, and fresh herbs, served over roasted lemon potatoes with garlicky green beans.","macros":{"cal":507,"protein":48,"carbs":33,"fat":20},"color":"basil","price":10},{"id":"southwest-beef-bowl","name":"Southwest Beef Bowl","ingredients":["Ground beef","Black beans","Corn","Bell pepper","Cilantro","Lime","White rice","Cauliflower Rice"],"desc":"Seasoned ground beef with black beans, roasted corn, and peppers over cilantro-lime rice.","macros":{"cal":560,"protein":36,"carbs":48,"fat":20},"color":"copper","price":10},{"id":"buffalo-chicken-and-sweet-potatoes-mtp6s7q2","name":"Buffalo Chicken and Sweet Potatoes","ingredients":["Ground chicken","Cottage cheese","Franks Buffalo Sauce","Sweet Potatoes","Green Beans","Cream Cheese"],"macros":{"cal":442,"protein":38,"carbs":29,"fat":18.5},"price":10},{"id":"spaghetti-sqaush-with-turkey-meatballs-mtqaprvu","name":"Spaghetti Squash with Turkey Meatballs","ingredients":["Spaghetti Squash","Turkey Meatballs","Garlic","Olive Oil","Cherry Tomatoes","Boursin Garlic and Fine Herbs","Cottage Cheese","Parmesan Cheese","Nutritional Yeast"],"macros":{"cal":465,"protein":39.4,"carbs":194,"fat":26.6},"price":10},{"id":"chicken-tj-soyaki-hibachi-mtt0coan","name":"Chicken TJ's Soyaki Hibachi","ingredients":["Chicken breast","Trader Joe's Vegetable Fried Rice","Cauliflower rice","Onion","Zucchini","Trader Joe's Soyaki","Cornstarch (slurry)","Ginger","Garlic","Soy sauce"],"macros":{"cal":452,"protein":51,"carbs":42,"fat":7.3},"price":10},{"id":"high-protein-chicken-alfredo-mtt4sct0","name":"High Protein Chicken Alfredo","ingredients":["Chicken breast","Barilla High Protein Penne","Broccoli","Cottage Cheese","Half-and-half","Fairlife fat-free milk","Parmesan","Garlic","Cornstarch (slurry)"],"macros":{"cal":497,"protein":63,"carbs":30.5,"fat":10.8},"price":10},{"id":"curry-pad-thai-with-shrimp-mttevtuw","name":"Curry Pad Thai with Shrimp","ingredients":["Shrimp","Barilla Protein Spaghetti","Zucchini","Broccoli","PB2 Powdered Protein Peanut Butter","Curry Powder","Sesame Oil","Sriracha","Ginger","Rice Vinegar","Soy Sauce","Garlic","Sesame Seeds"],"macros":{"cal":436,"protein":45,"carbs":43,"fat":8.7},"price":10},{"id":"burger-bowl-mttgycze","name":"Burger Bowl","ingredients":["Ground Beef 93% Lean","Sweet potato","Onion","Lettuce","Cherry tomatoes","Pickles","American Cheese","Light Mayo","Greek Yogurt","Ketchup","Mustard","Worcestershire Sauce","Balsamic Vinegar"],"macros":{"cal":433,"protein":38.5,"carbs":29,"fat":18.1},"price":10},{"id":"salmon-salad-power-bowl-mtw8ob52","name":"Salmon Salad Power Bowl","ingredients":["Salmon","Spring Mix","Quinoa","Mandarin Orange","Pepita","Pickled Red Onion","Olive Oil","Apple Cider Vinegar","Honey","Dijon"],"macros":{"cal":566,"protein":39.9,"carbs":33.4,"fat":30.7},"price":13},{"id":"creamy-cajun-salmon-and-mash-mtw9czvp","name":"Creamy Cajun Salmon and Mash","ingredients":["Salmon","Mashed Potatoes","Cauliflower Mash","Green Beans","Cottage Cheese","Half-and-Half","Cream Cheese","Parmesan Cheese","Butter","Garlic","Cajun Spice"],"price":13},{"id":"arroz-con-pollo-with-veggies-mtw9ovrw","name":"Arroz Con Pollo with Veggies","ingredients":["Chicken","Spanish Rice","Broccoli","Zucchini","Onion","Salsa","Queso"],"macros":{"cal":476.7,"protein":50.6,"carbs":42.8,"fat":11.3},"price":10},{"id":"chicken-chow-mein-noodles-mtwae1qq","name":"Chicken Chow Mein Noodles","ingredients":["Chicken Thighs","Barilla Protein Spaghetti","Cabbage","Onion","Carrots","Green Onion","Garlic","Oyster Sauce","Light Soy Sauce","Dark Soy Sauce","Shoaxing Wine","Sugar","Sesame Oil"],"macros":{"cal":430,"protein":34,"carbs":46.6,"fat":11.8},"price":10},{"id":"pancetta-pasta-mtwalfyt","name":"Pancetta Pasta","ingredients":["Diced Ham","Barilla Protein Spaghetti","Peas","Onion","Low-fat Cottage Cheese","Fairlife Fat-Free Milk","Parmesan","Garlic"],"macros":{"cal":451.5,"protein":50.5,"carbs":42.2,"fat":10.5},"price":10},{"id":"creamy-gochujang-gnocchi-mtwap59q","name":"Creamy Gochujang Gnocchi","ingredients":["Ground Beef 93% Lean","Gnocchi","Low-fat Cottage Cheese","Gochujang","White Miso Paste","Soy Sauce","Balsamic Vinegar","Garlic","Ginger","Red Pepper Flakes"],"macros":{"cal":565,"protein":44.4,"carbs":65.5,"fat":13.1},"price":13},{"id":"philly-bowl-mtwarqfg","name":"Philly Bowl","ingredients":["Shaved Steak","Bell Peppers","Mushrooms","Onion","Provolone Cheese","Bone Broth","Worcestershire sauce"],"macros":{"cal":423,"protein":47.7,"carbs":14.1,"fat":19.2},"price":13},{"id":"bourbon-garlic-chicken-with-rice-mtwb1yvs","name":"Bourbon Garlic Chicken with Rice","ingredients":["Chicken Thighs","Rice","Hoisin Sauce","Brown Sugar","Soy Sauce","Apple Juice","Bourbon","Ketchup","Rice Vinegar","Cornstarch slurry","Garlic","Ginger"],"macros":{"cal":628.5,"protein":38.5,"carbs":70.6,"fat":17.8},"price":10},{"id":"korean-chicken-bowl-mtwbbzic","name":"Korean Chicken Bowl","ingredients":["Chicken Thighs","White Rice","Broccoli","Egg White","Soy Sauce","Sesame Oil","Flour","Cornstarch","Ketchup Gochujang","Brown Sugar","Rice Vinegar","Honey"],"macros":{"cal":619,"protein":39.9,"carbs":68.4,"fat":19.9},"price":10}]</script>
-<script type="application/json" id="weekData">{"2026-08-31":["mediterranean-turkey-chili","lavender-herb-veggie-stir-fry"],"2026-09-07":["mediterranean-turkey-chili","lavender-herb-veggie-stir-fry","southwest-beef-bowl"],"2026-09-14":["lavender-herb-veggie-stir-fry",{"id":"lemon-herb-chicken-bowl","color":"lavender"},{"id":"philly-bowl-mtwarqfg","color":"copper"}],"2026-09-21":["buffalo-chicken-and-sweet-potatoes-mtp6s7q2",{"id":"high-protein-chicken-alfredo-mtt4sct0","color":"lavender"}],"2026-09-28":["mediterranean-turkey-chili","lavender-herb-veggie-stir-fry",{"id":"chicken-tj-soyaki-hibachi-mtt0coan","color":"copper"},{"id":"burger-bowl-mttgycze","color":"pine"}],"2026-10-05":["mediterranean-turkey-chili","lavender-herb-veggie-stir-fry",{"id":"curry-pad-thai-with-shrimp-mttevtuw","color":"lavender"},{"id":"southwest-beef-bowl","color":"basil"}],"2026-10-12":["lavender-herb-veggie-stir-fry",{"id":"spaghetti-sqaush-with-turkey-meatballs-mtqaprvu","color":"pine"},"lemon-herb-chicken-bowl"],"2026-10-19":[],"2026-10-26":["mediterranean-turkey-chili","lavender-herb-veggie-stir-fry"]}</script>
+<script type="application/json" id="recipeData">[{"id":"lemon-herb-chicken-bowl","name":"Lemon Herb Chicken Bowl","ingredients":["Chicken breast","Yukon gold potatoes","Green beans","Lemon","Garlic","Olive oil","Fresh thyme & rosemary"],"desc":"Grilled chicken thighs marinated overnight in lemon, garlic, and fresh herbs, served over roasted lemon potatoes with garlicky green beans.","macros":{"cal":507,"protein":48,"carbs":33,"fat":20},"color":"basil","price":10},{"id":"southwest-beef-bowl","name":"Taco Beef Bowl","ingredients":["Ground beef","Black beans","Corn","Cilantro","Lime","White rice","Cauliflower Rice"],"desc":"Seasoned ground beef with black beans, roasted corn, and peppers over cilantro-lime rice.","macros":{"cal":528,"protein":45,"carbs":45.4,"fat":19.1},"color":"copper","price":10},{"id":"buffalo-chicken-and-sweet-potatoes-mtp6s7q2","name":"Buffalo Chicken and Sweet Potatoes","ingredients":["Ground chicken","Cottage cheese","Franks Buffalo Sauce","Sweet Potatoes","Green Beans","Cream Cheese"],"macros":{"cal":441,"protein":36,"carbs":33,"fat":19.3},"price":10},{"id":"spaghetti-sqaush-with-turkey-meatballs-mtqaprvu","name":"Spaghetti Squash with Turkey Meatballs","ingredients":["Spaghetti Squash","Turkey Meatballs","Garlic","Olive Oil","Cherry Tomatoes","Boursin Garlic and Fine Herbs","Cottage Cheese","Parmesan Cheese","Nutritional Yeast"],"macros":{"cal":465,"protein":39.4,"carbs":194,"fat":26.6},"price":10},{"id":"chicken-tj-soyaki-hibachi-mtt0coan","name":"Chicken TJ's Soyaki Hibachi","ingredients":["Chicken breast","Trader Joe's Vegetable Fried Rice","Cauliflower rice","Onion","Zucchini","Trader Joe's Soyaki","Cornstarch (slurry)","Ginger","Garlic","Soy sauce"],"macros":{"cal":452,"protein":51,"carbs":42,"fat":7.3},"price":10},{"id":"high-protein-chicken-alfredo-mtt4sct0","name":"High Protein Chicken Alfredo","ingredients":["Chicken breast","Barilla High Protein Penne","Broccoli","Cottage Cheese","Half-and-half","Fairlife fat-free milk","Parmesan","Garlic","Cornstarch (slurry)"],"macros":{"cal":497,"protein":63,"carbs":30.5,"fat":10.8},"price":10},{"id":"curry-pad-thai-with-shrimp-mttevtuw","name":"Curry Pad Thai with Shrimp","ingredients":["Shrimp","Barilla Protein Spaghetti","Zucchini","Broccoli","PB2 Powdered Protein Peanut Butter","Curry Powder","Sesame Oil","Sriracha","Ginger","Rice Vinegar","Soy Sauce","Garlic","Sesame Seeds"],"macros":{"cal":436,"protein":45,"carbs":43,"fat":8.7},"price":10},{"id":"burger-bowl-mttgycze","name":"Burger Bowl","ingredients":["Ground Beef 93% Lean","Sweet potato","Onion","Lettuce","Cherry tomatoes","Pickles","American Cheese","Light Mayo","Greek Yogurt","Ketchup","Mustard","Worcestershire Sauce","Balsamic Vinegar"],"macros":{"cal":433,"protein":38.5,"carbs":29,"fat":18.1},"price":10},{"id":"salmon-salad-power-bowl-mtw8ob52","name":"Salmon Salad Power Bowl","ingredients":["Salmon","Spring Mix","Quinoa","Mandarin Orange","Pepita","Pickled Red Onion","Olive Oil","Apple Cider Vinegar","Honey","Dijon"],"macros":{"cal":566,"protein":39.9,"carbs":33.4,"fat":30.7},"price":13},{"id":"creamy-cajun-salmon-and-mash-mtw9czvp","name":"Creamy Cajun Salmon and Mash","ingredients":["Salmon","Mashed Potatoes","Cauliflower Mash","Green Beans","Cottage Cheese","Half-and-Half","Cream Cheese","Parmesan Cheese","Butter","Garlic","Cajun Spice"],"price":13},{"id":"arroz-con-pollo-with-veggies-mtw9ovrw","name":"Arroz Con Pollo with Veggies","ingredients":["Chicken","Spanish Rice","Broccoli","Zucchini","Onion","Salsa","Queso"],"macros":{"cal":476.7,"protein":50.6,"carbs":42.8,"fat":11.3},"price":10},{"id":"chicken-chow-mein-noodles-mtwae1qq","name":"Chicken Chow Mein Noodles","ingredients":["Chicken Thighs","Barilla Protein Spaghetti","Cabbage","Onion","Carrots","Green Onion","Garlic","Oyster Sauce","Light Soy Sauce","Dark Soy Sauce","Shoaxing Wine","Sugar","Sesame Oil"],"macros":{"cal":430,"protein":34,"carbs":46.6,"fat":11.8},"price":10},{"id":"pancetta-pasta-mtwalfyt","name":"Pancetta Pasta","ingredients":["Diced Ham","Barilla Protein Spaghetti","Peas","Onion","Low-fat Cottage Cheese","Fairlife Fat-Free Milk","Parmesan","Garlic"],"macros":{"cal":451.5,"protein":50.5,"carbs":42.2,"fat":10.5},"price":10},{"id":"creamy-gochujang-gnocchi-mtwap59q","name":"Creamy Gochujang Gnocchi","ingredients":["Ground Beef 93% Lean","Gnocchi","Low-fat Cottage Cheese","Gochujang","White Miso Paste","Soy Sauce","Balsamic Vinegar","Garlic","Ginger","Red Pepper Flakes"],"macros":{"cal":565,"protein":44.4,"carbs":65.5,"fat":13.1},"price":13},{"id":"philly-bowl-mtwarqfg","name":"Philly Bowl","ingredients":["Shaved Steak","Bell Peppers","Mushrooms","Onion","Provolone Cheese","Bone Broth","Worcestershire sauce"],"macros":{"cal":423,"protein":47.7,"carbs":14.1,"fat":19.2},"price":13},{"id":"bourbon-garlic-chicken-with-rice-mtwb1yvs","name":"Bourbon Garlic Chicken with Rice","ingredients":["Chicken Thighs","Rice","Hoisin Sauce","Brown Sugar","Soy Sauce","Apple Juice","Bourbon","Ketchup","Rice Vinegar","Cornstarch slurry","Garlic","Ginger"],"macros":{"cal":628.5,"protein":38.5,"carbs":70.6,"fat":17.8},"price":10},{"id":"korean-chicken-bowl-mtwbbzic","name":"Korean Chicken Bowl","ingredients":["Chicken Thighs","White Rice","Broccoli","Egg White","Soy Sauce","Sesame Oil","Flour","Cornstarch","Ketchup Gochujang","Brown Sugar","Rice Vinegar","Honey"],"macros":{"cal":619,"protein":39.9,"carbs":68.4,"fat":19.9},"price":10},{"id":"high-protein-mac-and-cheese-mu7jc2mg","name":"High Protein Mac and Cheese","ingredients":["Barilla High Protein Elbows","Low-fat cottage cheese","Sharp cheddar cheese","Fairlife fat-free milk","Butter","Cornstarch","Mustard powder"],"price":10,"macros":{"cal":588,"protein":44,"carbs":52,"fat":22}},{"id":"chocolate-cake-mu7kvlvh","name":"Protein Chocolate Cake","ingredients":["Pillsbury Zero Sugar Devil's Food Cake Mix","Fairlife 26g Protein Chocolate Protein Shake","Okios Triple Zero Vanilla Yogurt"],"price":5,"macros":{"cal":277,"protein":10,"carbs":64.8,"fat":4.1}},{"id":"protein-biscoff-pudding-mu7nm2cc","name":"Protein Biscoff Pudding","ingredients":["Vanilla Greek Yogurt","Sugar-free instant pudding mix","Lotus Biscoff Cookies","Biscoff Cookie Spread"],"price":5,"macros":{"cal":256,"protein":14.5,"carbs":29.8,"fat":8.5}},{"id":"broccoli-cheddar-and-ham-soup-mu8fe9k4","name":"Broccoli Cheddar and Ham Soup","ingredients":["Carrots","Onion","Celery","Garlic","Olive Oil","All-purpose Flour","Low-fat Cottage Cheese","Ham","Broccoli","Low-fat Shredded Cheddar","Chicken Bone Broth","Fair-life Fat Free Milk"],"price":13,"macros":{"cal":455,"protein":52.6,"carbs":29.8,"fat":16.3}},{"id":"smore-s-brownie-mu8gdi9t","name":"Smore's Brownie","ingredients":["Sweet Potato","Unsweetened Coco Powder","Peanut Butter","Eggs","Pure Maple Syrup","Vanilla Extract","Baking Powder","Salt","Dark Chocolate Chunks","Graham Crackers","Marshmallows"],"price":7,"macros":{"cal":396,"protein":9.6,"carbs":61.8,"fat":15}}]</script>
+<script type="application/json" id="weekData">{"2026-08-31":["mediterranean-turkey-chili","lavender-herb-veggie-stir-fry"],"2026-09-07":["mediterranean-turkey-chili","lavender-herb-veggie-stir-fry"],"2026-09-14":["lavender-herb-veggie-stir-fry"],"2026-09-21":[{"id":"buffalo-chicken-and-sweet-potatoes-mtp6s7q2","color":"pine"},{"id":"high-protein-chicken-alfredo-mtt4sct0","color":"pine"}],"2026-09-28":["mediterranean-turkey-chili","lavender-herb-veggie-stir-fry",{"id":"chicken-tj-soyaki-hibachi-mtt0coan","color":"pine"},{"id":"burger-bowl-mttgycze","color":"copper"},{"id":"chocolate-cake-mu7kvlvh","color":"lavender"}],"2026-10-05":["mediterranean-turkey-chili","lavender-herb-veggie-stir-fry",{"id":"curry-pad-thai-with-shrimp-mttevtuw","color":"basil"},"southwest-beef-bowl",{"id":"protein-biscoff-pudding-mu7nm2cc","color":"lavender"}],"2026-10-12":["lavender-herb-veggie-stir-fry",{"id":"spaghetti-sqaush-with-turkey-meatballs-mtqaprvu","color":"pine"},{"id":"lemon-herb-chicken-bowl","color":"pine"}],"2026-10-19":[],"2026-10-26":["mediterranean-turkey-chili","lavender-herb-veggie-stir-fry"]}</script>
 <script type="application/json" id="featuredWeekData">null</script>
 <script type="application/json" id="ordersData">[{"id":"order-mttar7rk-2x8d","name":"Qua","email":"brocklongley99@gmail.com","weekKey":"2026-09-07","items":[{"name":"","qty":2}],"submittedAt":"2026-09-08T23:24:42.896Z"},{"id":"order-mttbvj18-p8nn","name":"Buddy","email":"yazzyabdelhaq@gmail.com","weekKey":"2026-09-07","items":[{"name":"Lemon Herb Chicken Bowl","qty":1}],"submittedAt":"2026-09-08T23:56:03.740Z"},{"id":"order-mtuji1dk-d0nw","orderNumber":"YMP-1001","name":"Brock Longley","email":"brocklongley99@gmail.com","phone":"704-984-2697","weekKey":"2026-09-07","items":[{"name":"Southwest Beef Bowl","qty":3}],"submittedAt":"2026-09-09T20:17:17.432Z"},{"id":"order-mtuqmsm7-85ot","orderNumber":"YMP-1002","name":"Matthew Lucas","email":"mlucas@yesco.com","phone":"3362850795","weekKey":"2026-09-07","items":[{"name":"Southwest Beef Bowl","qty":4}],"submittedAt":"2026-09-09T23:36:56.671Z"},{"id":"order-mu0l4pa7-l7qz","orderNumber":"YMP-1003","name":"Boo Boo Migoo","email":"stink.mcgee@gmail.com","phone":"5161651651","weekKey":"2026-09-14","items":[{"name":"","qty":3}],"submittedAt":"2026-09-14T01:49:31.519Z"},{"id":"order-mu0m2m4d-i4dj","orderNumber":"YMP-1004","name":"Boo Stinky Poo","email":"stink.mcgee@gmail.com","phone":"2487196518","weekKey":"2026-09-14","items":[{"name":"Philly Bowl","qty":3},{"name":"Lemon Herb Chicken Bowl","qty":3}],"submittedAt":"2026-09-14T02:15:53.725Z"}]</script>
 <script type="application/json" id="ordersResetData">"2026-09-09T01:13:07.505Z"</script>
@@ -860,6 +974,13 @@
           <span>Recipe name</span>
           <input type="text" id="recipeNameInput" placeholder="e.g. Honey Garlic Shrimp Bowl" required="">
         </label>
+        <label class="recipe-field" style="max-width: 12rem;">
+          <span>Category</span>
+          <select id="recipeCategoryInput">
+            <option value="lunch">Lunch</option>
+            <option value="dessert">Dessert</option>
+          </select>
+        </label>
         <label class="recipe-field">
           <span>Ingredients (one per line)</span>
           <textarea id="recipeIngrInput" rows="4" placeholder="Shrimp
@@ -875,9 +996,9 @@ Soy sauce" required=""></textarea>
   </div>
 </section>
 
-<section class="cal-page" id="feedbackPage" hidden>
+<section class="cal-page" id="feedbackPage" hidden="">
   <div class="cal-page-inner">
-    <a href="#top" class="cal-back-link" id="feedbackBackLink">&larr; Back to home</a>
+    <a href="#top" class="cal-back-link" id="feedbackBackLink">← Back to home</a>
     <div class="cal-header-row">
       <h1 class="cal-title" style="text-align:left; min-width:0;">Feedback</h1>
     </div>
@@ -886,41 +1007,41 @@ Soy sauce" required=""></textarea>
     <form class="recipe-form" id="feedbackForm">
       <label class="recipe-field">
         <span>Name</span>
-        <input type="text" id="feedbackName" required>
+        <input type="text" id="feedbackName" required="">
       </label>
       <label class="recipe-field">
         <span>Email</span>
-        <input type="email" id="feedbackEmail" required>
+        <input type="email" id="feedbackEmail" required="">
       </label>
       <label class="recipe-field">
         <span>Meal</span>
-        <input type="text" id="feedbackMeal" list="feedbackMealDatalist" placeholder="Start typing a meal&hellip;" autocomplete="off" required>
+        <input type="text" id="feedbackMeal" list="feedbackMealDatalist" placeholder="Start typing a meal…" autocomplete="off" required="">
         <datalist id="feedbackMealDatalist"></datalist>
       </label>
       <label class="recipe-field">
         <span>Description</span>
-        <textarea id="feedbackDescription" rows="4" placeholder="How was it? Taste, texture, anything you'd change&hellip;"></textarea>
+        <textarea id="feedbackDescription" rows="4" placeholder="How was it? Taste, texture, anything you'd change…"></textarea>
       </label>
       <div class="recipe-field">
         <span>Rating</span>
         <div class="star-rating" id="feedbackStars" role="radiogroup" aria-label="Rating out of 5 stars">
-          <button type="button" class="star" data-value="1" aria-label="1 star">&#9733;</button>
-          <button type="button" class="star" data-value="2" aria-label="2 stars">&#9733;</button>
-          <button type="button" class="star" data-value="3" aria-label="3 stars">&#9733;</button>
-          <button type="button" class="star" data-value="4" aria-label="4 stars">&#9733;</button>
-          <button type="button" class="star" data-value="5" aria-label="5 stars">&#9733;</button>
+          <button type="button" class="star" data-value="1" aria-label="1 star">★</button>
+          <button type="button" class="star" data-value="2" aria-label="2 stars">★</button>
+          <button type="button" class="star" data-value="3" aria-label="3 stars">★</button>
+          <button type="button" class="star" data-value="4" aria-label="4 stars">★</button>
+          <button type="button" class="star" data-value="5" aria-label="5 stars">★</button>
         </div>
       </div>
-      <p class="admin-error" id="feedbackError" hidden>Please add your name, email, the meal, and a rating.</p>
+      <p class="admin-error" id="feedbackError" hidden="">Please add your name, email, the meal, and a rating.</p>
       <button type="submit" class="btn btn-fill">Send feedback</button>
       <p class="recipe-save-status" id="feedbackStatus"></p>
     </form>
   </div>
 </section>
 
-<section class="cal-page" id="ideasPage" hidden>
+<section class="cal-page" id="ideasPage" hidden="">
   <div class="cal-page-inner">
-    <a href="#top" class="cal-back-link" id="ideasBackLink">&larr; Back to home</a>
+    <a href="#top" class="cal-back-link" id="ideasBackLink">← Back to home</a>
     <div class="cal-header-row">
       <h1 class="cal-title" style="text-align:left; min-width:0;">Recipe Ideas</h1>
     </div>
@@ -929,30 +1050,30 @@ Soy sauce" required=""></textarea>
     <form class="recipe-form" id="ideaForm">
       <label class="recipe-field">
         <span>Your Name</span>
-        <input type="text" id="ideaYourName" required>
+        <input type="text" id="ideaYourName" required="">
       </label>
       <label class="recipe-field">
         <span>Your Email</span>
-        <input type="email" id="ideaYourEmail" required>
+        <input type="email" id="ideaYourEmail" required="">
       </label>
       <label class="recipe-field">
         <span>Recipe Name</span>
-        <input type="text" id="ideaName" required>
+        <input type="text" id="ideaName" required="">
       </label>
       <label class="recipe-field">
         <span>Description</span>
-        <textarea id="ideaDescription" rows="4" placeholder="What is it, and why would you love to see it?" required></textarea>
+        <textarea id="ideaDescription" rows="4" placeholder="What is it, and why would you love to see it?" required=""></textarea>
       </label>
-      <p class="admin-error" id="ideaError" hidden>Please add your name, email, a recipe name, and a description.</p>
+      <p class="admin-error" id="ideaError" hidden="">Please add your name, email, a recipe name, and a description.</p>
       <button type="submit" class="btn btn-fill">Send idea</button>
       <p class="recipe-save-status" id="ideaStatus"></p>
     </form>
   </div>
 </section>
 
-<section class="cal-page" id="certificationsPage" hidden>
+<section class="cal-page" id="certificationsPage" hidden="">
   <div class="cal-page-inner">
-    <a href="#top" class="cal-back-link" id="certBackLink">&larr; Back to home</a>
+    <a href="#top" class="cal-back-link" id="certBackLink">← Back to home</a>
     <div class="cal-header-row">
       <h1 class="cal-title" style="text-align:left; min-width:0;">Certifications</h1>
     </div>
@@ -966,9 +1087,9 @@ Soy sauce" required=""></textarea>
   </div>
 </section>
 
-<section class="cal-page" id="orderPage" hidden>
+<section class="cal-page" id="orderPage" hidden="">
   <div class="cal-page-inner order-page-inner">
-    <a href="#top" class="cal-back-link" id="orderBackLink">&larr; Back to home</a>
+    <a href="#top" class="cal-back-link" id="orderBackLink">← Back to home</a>
     <div class="cal-header-row">
       <h1 class="cal-title" style="text-align:left; min-width:0;">Order Here</h1>
     </div>
@@ -979,22 +1100,22 @@ Soy sauce" required=""></textarea>
     <form class="recipe-form" id="orderForm" style="max-width: 480px;">
       <label class="recipe-field">
         <span>Name</span>
-        <input type="text" id="orderName" required>
+        <input type="text" id="orderName" required="">
       </label>
       <label class="recipe-field">
         <span>Email</span>
-        <input type="email" id="orderEmail" required>
+        <input type="email" id="orderEmail" required="">
       </label>
       <label class="recipe-field">
         <span>Phone number</span>
-        <input type="tel" id="orderPhone" required>
+        <input type="tel" id="orderPhone" required="">
       </label>
 
       <div id="orderLines"></div>
 
       <button type="button" class="btn btn-ghost" id="orderAddLineBtn">+ Request another meal</button>
 
-      <p class="admin-error" id="orderError" hidden>Please add your name and at least one meal with a quantity.</p>
+      <p class="admin-error" id="orderError" hidden="">Please add your name and at least one meal with a quantity.</p>
       <div class="order-total-row">
         <span class="order-total-label">Price</span>
         <span class="order-total-value" id="orderTotalValue">$0.00</span>
@@ -1030,7 +1151,7 @@ Soy sauce" required=""></textarea>
   </div>
 </section>
 
-<div class="order-confirm-overlay" id="orderConfirmModal" hidden>
+<div class="order-confirm-overlay" id="orderConfirmModal" hidden="">
   <div class="order-confirm-box">
     <h2 class="order-confirm-title">Order Sent!</h2>
     <p class="order-confirm-number">Order Number: <strong id="orderConfirmNumber"></strong></p>
@@ -1040,9 +1161,9 @@ Soy sauce" required=""></textarea>
   </div>
 </div>
 
-<section class="cal-page" id="ordersPlacedPage" hidden>
+<section class="cal-page" id="ordersPlacedPage" hidden="">
   <div class="cal-page-inner">
-    <a href="#top" class="cal-back-link" id="ordersPlacedBackLink">&larr; Back to home</a>
+    <a href="#top" class="cal-back-link" id="ordersPlacedBackLink">← Back to home</a>
     <div class="cal-header-row">
       <h1 class="cal-title" style="text-align:left; min-width:0;">Admin Dashboard</h1>
     </div>
@@ -1083,7 +1204,7 @@ Soy sauce" required=""></textarea>
       <div class="orders-summary" id="ordersSummaryList"></div>
 
       <button type="button" class="btn btn-ghost" id="dashBuyListToggle">View Buy List</button>
-      <div class="buy-list" id="dashBuyList" hidden></div>
+      <div class="buy-list" id="dashBuyList" hidden=""></div>
 
       <h3 class="dashboard-subhead">By customer</h3>
       <div class="orders-detail" id="ordersDetailList"></div>
@@ -1110,7 +1231,7 @@ Soy sauce" required=""></textarea>
   <p>© 2026 Yaz's Meal Prep</p>
 </footer>
 
-<div class="admin-save-bar" id="adminSaveBar" hidden>
+<div class="admin-save-bar" id="adminSaveBar" hidden="">
   <span class="admin-save-text">You have unsaved changes.</span>
   <span class="admin-save-status" id="adminSaveStatus"></span>
   <button type="button" class="btn btn-fill admin-save-btn" id="adminSaveBtn">Save changes</button>
@@ -1138,6 +1259,25 @@ Soy sauce" required=""></textarea>
     }
 
     var nav = document.getElementById('siteNav');
+    var navToggleBtn = document.getElementById('navToggleBtn');
+    var navMenu = document.getElementById('navMenu');
+    function closeMobileMenu() {
+      nav.classList.remove('menu-open');
+      if (navToggleBtn) navToggleBtn.setAttribute('aria-expanded', 'false');
+    }
+    if (navToggleBtn) {
+      navToggleBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var willOpen = !nav.classList.contains('menu-open');
+        nav.classList.toggle('menu-open', willOpen);
+        navToggleBtn.setAttribute('aria-expanded', String(willOpen));
+      });
+    }
+    document.addEventListener('click', function (e) {
+      if (nav.classList.contains('menu-open') && navMenu && !navMenu.contains(e.target) && e.target !== navToggleBtn && !navToggleBtn.contains(e.target)) {
+        closeMobileMenu();
+      }
+    });
     var onScroll = function () {
       if (currentPage !== 'home' || window.scrollY > window.innerHeight * 0.55) {
         nav.classList.add('show');
@@ -1166,6 +1306,11 @@ Soy sauce" required=""></textarea>
     var recipeDataEl = document.getElementById('recipeData');
     var RECIPES = [];
     try { RECIPES = JSON.parse((recipeDataEl && recipeDataEl.textContent) || '[]'); } catch (e) { RECIPES = []; }
+    RECIPES.forEach(function (r) {
+      if (r.category !== 'lunch' && r.category !== 'dessert') {
+        r.category = /dessert|cake|cookie|brownie|pie|pudding/i.test(r.name) ? 'dessert' : 'lunch';
+      }
+    });
 
     var weekDataEl = document.getElementById('weekData');
     var WEEK_OVERRIDES = {};
@@ -1728,7 +1873,7 @@ Soy sauce" required=""></textarea>
     var ROUTED_PAGES = Object.keys(PAGES);
     var currentPage = 'home';
 
-    function goToPage(name, skipHash) {
+    function goToPage(name, skipHash, targetRecipeId) {
       if (name === 'ordersPlaced' && !isAdmin()) name = 'home';
       Object.keys(PAGES).forEach(function (key) { PAGES[key].hidden = (key !== name); });
       homePage.hidden = (name !== 'home');
@@ -1741,6 +1886,7 @@ Soy sauce" required=""></textarea>
       if (ordersPlacedOpenBtn) ordersPlacedOpenBtn.classList.toggle('is-active', name === 'ordersPlaced');
       hideMealPopover();
       closeBarEditor();
+      closeMobileMenu();
       window.scrollTo(0, 0);
       if (name !== 'home') nav.classList.add('show');
 
@@ -1751,7 +1897,9 @@ Soy sauce" required=""></textarea>
         buildCalendar(calState.year, calState.month);
       }
       if (name === 'ingredients') {
+        if (recipeSearchEl) recipeSearchEl.value = '';
         renderRecipeList();
+        if (targetRecipeId) highlightRecipeItem(targetRecipeId);
       }
       if (name === 'feedback') {
         renderFeedbackMealOptions();
@@ -1789,11 +1937,13 @@ Soy sauce" required=""></textarea>
     if (orderBackLink) orderBackLink.addEventListener('click', function (e) { e.preventDefault(); goToPage('home'); });
     if (ordersPlacedBackLink) ordersPlacedBackLink.addEventListener('click', function (e) { e.preventDefault(); goToPage('home'); });
     if (navHomeLink) navHomeLink.addEventListener('click', function (e) {
+      closeMobileMenu();
       if (currentPage !== 'home') { e.preventDefault(); goToPage('home'); }
     });
     document.addEventListener('keydown', function (e) {
       if (e.key !== 'Escape') return;
       if (adminDropdown && !adminDropdown.hidden) { closeAdminDropdown(); return; }
+      if (nav.classList.contains('menu-open')) { closeMobileMenu(); return; }
       if (barEditorEl) { closeBarEditor(); return; }
       if (currentPage !== 'home') goToPage('home');
     });
@@ -1822,6 +1972,7 @@ Soy sauce" required=""></textarea>
     var recipeSearchEl = document.getElementById('recipeSearch');
     var recipeFormEl = document.getElementById('recipeForm');
     var recipeNameInput = document.getElementById('recipeNameInput');
+    var recipeCategoryInput = document.getElementById('recipeCategoryInput');
     var recipeIngrInput = document.getElementById('recipeIngrInput');
     var recipeSaveStatus = document.getElementById('recipeSaveStatus');
 
@@ -1842,22 +1993,31 @@ Soy sauce" required=""></textarea>
         return;
       }
       var admin = isAdmin();
-      matches.forEach(function (r) {
+      function buildItem(r) {
         var item = document.createElement('div');
         item.className = 'recipe-item';
+        item.dataset.recipeId = r.id;
 
         var row = document.createElement('div');
         row.className = 'recipe-toggle-row';
         var btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'recipe-toggle';
+        var nameWrap = document.createElement('span');
+        nameWrap.className = 'recipe-name-wrap';
         var nameSpan = document.createElement('span');
+        nameSpan.className = 'recipe-name';
         nameSpan.textContent = r.name;
+        var categoryTag = document.createElement('span');
+        categoryTag.className = 'recipe-category-tag cat-' + (r.category || 'lunch');
+        categoryTag.textContent = r.category === 'dessert' ? 'Dessert' : 'Lunch';
+        nameWrap.appendChild(nameSpan);
+        nameWrap.appendChild(categoryTag);
         var chevron = document.createElement('span');
         chevron.className = 'recipe-chevron';
         chevron.setAttribute('aria-hidden', 'true');
         chevron.innerHTML = '&#8250;';
-        btn.appendChild(nameSpan);
+        btn.appendChild(nameWrap);
         btn.appendChild(chevron);
         row.appendChild(btn);
 
@@ -1895,6 +2055,23 @@ Soy sauce" required=""></textarea>
             var nameInput = document.createElement('input');
             nameInput.type = 'text';
             nameInput.value = r.name;
+
+            var categoryWrap = document.createElement('div');
+            categoryWrap.className = 'recipe-edit-category';
+            var categoryLabel = document.createElement('label');
+            var categorySpan = document.createElement('span');
+            categorySpan.textContent = 'Category';
+            var categorySelect = document.createElement('select');
+            ['lunch', 'dessert'].forEach(function (val) {
+              var opt = document.createElement('option');
+              opt.value = val;
+              opt.textContent = val === 'dessert' ? 'Dessert' : 'Lunch';
+              categorySelect.appendChild(opt);
+            });
+            categorySelect.value = r.category || 'lunch';
+            categoryLabel.appendChild(categorySpan);
+            categoryLabel.appendChild(categorySelect);
+            categoryWrap.appendChild(categoryLabel);
 
             var ingrTextarea = document.createElement('textarea');
             ingrTextarea.rows = 4;
@@ -1953,6 +2130,7 @@ Soy sauce" required=""></textarea>
             actions.appendChild(cancelBtn);
 
             editPanel.appendChild(nameInput);
+            editPanel.appendChild(categoryWrap);
             editPanel.appendChild(ingrTextarea);
             editPanel.appendChild(priceWrap);
             editPanel.appendChild(macrosWrap);
@@ -1964,6 +2142,7 @@ Soy sauce" required=""></textarea>
               var newLines = ingrTextarea.value.split('\n').map(function (s) { return s.trim(); }).filter(Boolean);
               if (!newName || !newLines.length) return;
               r.name = newName;
+              r.category = categorySelect.value === 'dessert' ? 'dessert' : 'lunch';
               r.ingredients = newLines;
               var price = priceInput.value === '' ? null : Number(priceInput.value);
               if (price === null) { delete r.price; } else { r.price = price; }
@@ -2006,8 +2185,43 @@ Soy sauce" required=""></textarea>
 
         item.appendChild(row);
         item.appendChild(panel);
-        recipeListEl.appendChild(item);
+        return item;
+      }
+
+      var groups = [
+        { key: 'lunch', label: 'Lunches' },
+        { key: 'dessert', label: 'Desserts' }
+      ];
+      groups.forEach(function (g) {
+        var groupItems = matches.filter(function (r) { return (r.category || 'lunch') === g.key; });
+        if (!groupItems.length) return;
+        groupItems.sort(function (a, b) { return a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }); });
+        var groupEl = document.createElement('div');
+        groupEl.className = 'recipe-group';
+        var heading = document.createElement('h2');
+        heading.className = 'recipe-group-title';
+        heading.textContent = g.label;
+        var itemsWrap = document.createElement('div');
+        itemsWrap.className = 'recipe-group-items';
+        groupItems.forEach(function (r) { itemsWrap.appendChild(buildItem(r)); });
+        groupEl.appendChild(heading);
+        groupEl.appendChild(itemsWrap);
+        recipeListEl.appendChild(groupEl);
       });
+    }
+
+    function highlightRecipeItem(id) {
+      if (!recipeListEl) return;
+      var target = recipeListEl.querySelector('[data-recipe-id="' + id + '"]');
+      if (!target) return;
+      var panel = target.querySelector('.recipe-ingr-list');
+      if (panel && panel.hidden) {
+        panel.hidden = false;
+        target.classList.add('open');
+      }
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      target.classList.add('recipe-item-highlight');
+      setTimeout(function () { target.classList.remove('recipe-item-highlight'); }, 1700);
     }
 
     if (recipeSearchEl) {
@@ -2021,8 +2235,10 @@ Soy sauce" required=""></textarea>
         var lines = (recipeIngrInput.value || '').split('\n').map(function (s) { return s.trim(); }).filter(Boolean);
         if (!name || !lines.length) return;
         var id = slugify(name) + '-' + Date.now().toString(36);
-        RECIPES.push({ id: id, name: name, ingredients: lines });
+        var category = (recipeCategoryInput && recipeCategoryInput.value === 'dessert') ? 'dessert' : 'lunch';
+        RECIPES.push({ id: id, name: name, category: category, ingredients: lines });
         recipeNameInput.value = '';
+        if (recipeCategoryInput) recipeCategoryInput.value = 'lunch';
         recipeIngrInput.value = '';
         if (recipeSearchEl) recipeSearchEl.value = '';
         renderRecipeList();
@@ -2686,8 +2902,10 @@ Soy sauce" required=""></textarea>
       menu.forEach(function (slot) {
         var meal = getRecipe(slotMealId(slot));
         if (!meal) return;
-        var card = document.createElement('div');
+        var card = document.createElement('button');
+        card.type = 'button';
         card.className = 'meal-card';
+        card.setAttribute('aria-label', 'View ingredients for ' + meal.name);
         var h3 = document.createElement('h3');
         h3.textContent = meal.name;
         card.appendChild(h3);
@@ -2710,6 +2928,11 @@ Soy sauce" required=""></textarea>
           macros.appendChild(t2);
           card.appendChild(macros);
         }
+        var cardCta = document.createElement('span');
+        cardCta.className = 'meal-card-cta';
+        cardCta.textContent = 'View ingredients →';
+        card.appendChild(cardCta);
+        card.addEventListener('click', function () { goToPage('ingredients', false, meal.id); });
         menuGridEl.appendChild(card);
       });
 
@@ -2732,4 +2955,5 @@ Soy sauce" required=""></textarea>
       goToPage(window.location.hash.replace('#', ''), true);
     }
   })();
-</script></body></html>
+</script>
+</body></html>
