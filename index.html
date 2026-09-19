@@ -399,13 +399,6 @@
   .recipe-group + .recipe-group { margin-top: 2.2rem; }
   .recipe-group-title { font-size: 1.3rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); margin: 0 0 0.9rem; }
   .recipe-group-items { display: flex; flex-direction: column; gap: 0.6rem; }
-  .recipe-name-wrap { display: flex; flex-direction: column; align-items: flex-start; gap: 0.2rem; }
-  .recipe-category-tag {
-    font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 0.68rem;
-    text-transform: uppercase; letter-spacing: 0.07em;
-  }
-  .recipe-category-tag.cat-lunch { color: var(--basil-dark); }
-  .recipe-category-tag.cat-dessert { color: var(--lavender-dark); }
   .recipe-edit-category { margin-bottom: 0.6rem; }
   .recipe-edit-category label { display: flex; flex-direction: column; gap: 0.3rem; font-size: 0.78rem; font-weight: 600; color: var(--ink-soft); max-width: 12rem; }
   .recipe-edit-category select {
@@ -2075,21 +2068,14 @@ Soy sauce" required=""></textarea>
         var btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'recipe-toggle';
-        var nameWrap = document.createElement('span');
-        nameWrap.className = 'recipe-name-wrap';
         var nameSpan = document.createElement('span');
         nameSpan.className = 'recipe-name';
         nameSpan.textContent = r.name;
-        var categoryTag = document.createElement('span');
-        categoryTag.className = 'recipe-category-tag cat-' + (r.category || 'lunch');
-        categoryTag.textContent = r.category === 'dessert' ? 'Dessert' : 'Lunch';
-        nameWrap.appendChild(nameSpan);
-        nameWrap.appendChild(categoryTag);
         var chevron = document.createElement('span');
         chevron.className = 'recipe-chevron';
         chevron.setAttribute('aria-hidden', 'true');
         chevron.innerHTML = '&#8250;';
-        btn.appendChild(nameWrap);
+        btn.appendChild(nameSpan);
         btn.appendChild(chevron);
         row.appendChild(btn);
 
